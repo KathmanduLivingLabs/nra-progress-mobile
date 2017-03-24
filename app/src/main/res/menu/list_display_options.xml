@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_survey"
+        android:title="Survey Progress" />
+    <item android:id="@+id/menu_constrution"
+        android:title="Construction Status" />
+    <item android:id="@+id/menu_grant"
+        android:title="Grant Recieved" />
+    <item android:id="@+id/menu_installment"
+        android:title="Second Installment" />
+
+</menu>
