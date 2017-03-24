@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 
 public class MainActivity extends ListActivity {
@@ -25,6 +28,8 @@ public class MainActivity extends ListActivity {
     private ListAdapter adapter;
     EditText inputSearch;
     TextView emptyText;
+    FloatingActionMenu materialDesignFAM;
+    FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,11 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
         inputSearch = (EditText) findViewById(R.id.inputSearch);
         emptyText = (TextView) getListView().getEmptyView();
+        materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
+        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
+        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
+        floatingActionButton3 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item3);
+        floatingActionButton4 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item4);
 
 
         adapter = new ListAdapter(this);
@@ -75,6 +85,33 @@ public class MainActivity extends ListActivity {
                 // TODO Auto-generated method stub
             }
         });
+
+        floatingActionButton1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                adapter.setDisplay(1);
+
+            }
+        });
+        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                adapter.setDisplay(2);
+
+            }
+        });
+        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                adapter.setDisplay(3);
+
+            }
+        });
+        floatingActionButton4.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                adapter.setDisplay(4);
+
+            }
+        });
+
+
     }
 
     @Override

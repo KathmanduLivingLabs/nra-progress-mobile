@@ -16,7 +16,7 @@ public class ListAdapter extends BaseAdapter implements Filterable{
 
     private Context mContext;
     private NameFilter nameFilter;
-    private int displayStyle = 1;
+    private int displayStyle = 2;
 
     private LayoutInflater mLayoutInflater;
 
@@ -50,9 +50,8 @@ public class ListAdapter extends BaseAdapter implements Filterable{
                         ViewGroup parent) {
         LinearLayout itemView;
         if (convertView == null) {
-            itemView = (LinearLayout) mLayoutInflater.inflate(
-                    R.layout.list_item, parent, false);
-
+                itemView = (LinearLayout) mLayoutInflater.inflate(
+                        R.layout.list_item, parent, false);
         } else {
             itemView = (LinearLayout) convertView;
         }

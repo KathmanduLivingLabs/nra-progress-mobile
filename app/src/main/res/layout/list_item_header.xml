@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:background="#f5f5f5"
     android:orientation="vertical">
 
     <TextView
@@ -10,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="A List item title"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -20,7 +21,7 @@
         android:layout_marginTop="5dp"
         android:maxLines="4"
         android:text="The List item description"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/listDetailTwo"
@@ -29,7 +30,7 @@
         android:layout_marginTop="5dp"
         android:maxLines="4"
         android:text="The List item description"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/listDetailThree"
@@ -39,7 +40,7 @@
         android:maxLines="4"
         android:visibility="gone"
         android:text="The List item description"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/listDetailFour"
@@ -49,6 +50,6 @@
         android:maxLines="4"
         android:visibility="gone"
         android:text="The List item description"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>
