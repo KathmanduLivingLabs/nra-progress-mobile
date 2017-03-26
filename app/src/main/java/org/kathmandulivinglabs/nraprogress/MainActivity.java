@@ -2,6 +2,7 @@ package org.kathmandulivinglabs.nraprogress;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -118,7 +119,11 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         ListItem selectedItem = (ListItem) getListView().getItemAtPosition(position);
-        int code = selectedItem.getCode();
+        Intent detailsActivity = new Intent(getApplicationContext(), DetailsActivity.class);
+        startActivity(detailsActivity);
+
+
+        /*int code = selectedItem.getCode();
         if (code < 100){
             adapter.clearEntries();
             if(isNetworkAvailable()) {
@@ -128,7 +133,7 @@ public class MainActivity extends ListActivity {
                 emptyText.setText("No Internet Connection, Connect to Internet and Restart the App");
             }
 
-        }
+        }*/
     }
 
 
