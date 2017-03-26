@@ -48,16 +48,6 @@ public class MainActivity extends ListActivity {
         adapter = new ListAdapter(this);
         setListAdapter(adapter);
 
-/*        ArrayList<ListItem> dummyData = new ArrayList<>();
-        String[] districts = {"Dolakha","Nuwakot","Sindhupalchowk","Gorkha","Dhading"};
-        for(int i=0;i < districts.length; i++){
-            ListItem dummyItem = new ListItem(9999,districts[i],5000,2000,100,100,100,123,345,543,789);
-            dummyData.add(dummyItem);
-        }
-        adapter.upDateEntries(dummyData);*/
-
-
-
         if(isNetworkAvailable()) {
             LoadData dataLoader = new LoadData(adapter);
             dataLoader.execute("");
@@ -90,24 +80,28 @@ public class MainActivity extends ListActivity {
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 adapter.setDisplay(1);
+                materialDesignFAM.close(false);
 
             }
         });
         floatingActionButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 adapter.setDisplay(2);
+                materialDesignFAM.close(false);
 
             }
         });
         floatingActionButton3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 adapter.setDisplay(3);
+                materialDesignFAM.close(false);
 
             }
         });
         floatingActionButton4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 adapter.setDisplay(4);
+                materialDesignFAM.close(false);
 
             }
         });
@@ -119,21 +113,12 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         ListItem selectedItem = (ListItem) getListView().getItemAtPosition(position);
-        Intent detailsActivity = new Intent(getApplicationContext(), DetailsActivity.class);
-        startActivity(detailsActivity);
-
-
-        /*int code = selectedItem.getCode();
+        int code = selectedItem.getCode();
         if (code < 100){
-            adapter.clearEntries();
-            if(isNetworkAvailable()) {
-                LoadData dataLoader = new LoadData(adapter);
-                dataLoader.execute(String.valueOf(code));
-            } else {
-                emptyText.setText("No Internet Connection, Connect to Internet and Restart the App");
-            }
-
-        }*/
+            Intent detailsActivity = new Intent(getApplicationContext(), DetailsActivity.class);
+            detailsActivity.putExtra("CODE", code);
+            startActivity(detailsActivity);
+        }
     }
 
 
@@ -142,34 +127,5 @@ public class MainActivity extends ListActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.list_display_options, menu);
-        return super.onCreateOptionsMenu(menu);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_survey:
-                adapter.setDisplay(1);
-                return true;
-            case R.id.menu_constrution:
-                adapter.setDisplay(2);
-                return true;
-            case R.id.menu_installment:
-                adapter.setDisplay(3);
-                return true;
-            case R.id.menu_grant:
-                adapter.setDisplay(4);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

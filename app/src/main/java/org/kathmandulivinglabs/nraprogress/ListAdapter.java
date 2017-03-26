@@ -10,7 +10,10 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ListAdapter extends BaseAdapter implements Filterable{
 
@@ -67,46 +70,59 @@ public class ListAdapter extends BaseAdapter implements Filterable{
         TextView detailTextfour = (TextView)
                 itemView.findViewById(R.id.listDetailFour);
 
-        String detailTotalBeneficiaries = "Total Beneficiaries: " + String.valueOf(mEntries.get(position).getBeneficiariesTotal());
-        String detailSurveyCompleted = "Surveys Completed: " + String.valueOf(mEntries.get(position).getBeneficiariesSurveyed());
-        String detailConstructionComplete = "Construction Complete: " + String.valueOf(mEntries.get(position).getConstructionComplete());
-        String detailConstructionInProgress = "Construction In Progress: " + String.valueOf(mEntries.get(position).getConstructionInProgress());
-        String detailConstructionNotStarted = "Construction Not Started: " + String.valueOf(mEntries.get(position).getConstructionNotStarted());
-        String detailsSecondInstallmentApplied = "Second Installment Applied: " + String.valueOf(mEntries.get(position).getInstallmentApplied());
-        String detailsSecondInstallmentNotApplied = "Second Installment Not Applied: " + String.valueOf(mEntries.get(position).getInstallmentNotApplied());
-        String detailGrantRecived = "Grant Recived: " + String.valueOf(mEntries.get(position).getGrantReceived());
-        String detailGrantNotRecived = "Grant Not Recived: " + String.valueOf(mEntries.get(position).getGrantNotRecieved());
+        ListItem currrentItem = mEntries.get(position);
+        int tbf = currrentItem.getBeneficiariesTotal();
+        int bfs = currrentItem.getBeneficiariesSurveyed();
+        int cc = currrentItem.getConstructionComplete();
+        int cip = currrentItem.getConstructionInProgress();
+        int cns = currrentItem.getConstructionNotStarted();
+        int sia = currrentItem.getInstallmentApplied();
+        int sina = currrentItem.getInstallmentNotApplied();
+        int gr = currrentItem.getGrantReceived();
+        int gnr = currrentItem.getGrantNotRecieved();
+
+
+        String detailTotalBeneficiaries = "Total Beneficiaries: " + String.valueOf(tbf);
+        String detailSurveyCompleted = "Beneficiaries Surveyed: " + String.valueOf(bfs);
+        String detailConstructionComplete = "Construction Complete: " + String.valueOf(cc);
+        String detailConstructionInProgress = "Construction In Progress: " + String.valueOf(cip);
+        String detailConstructionNotStarted = "Construction Not Started: " + String.valueOf(cns);
+        String detailsSecondInstallmentApplied = "Second Installment Applied: " + String.valueOf(sia);
+        String detailsSecondInstallmentNotApplied = "Second Installment Not Applied: " + String.valueOf(sina);
+        String detailGrantRecived = "Grant Recived: " + String.valueOf(gr);
+        String detailGrantNotRecived = "Grant Not Recived: " + String.valueOf(gnr);
 
 
         String title = mEntries.get(position).getName();
+        sortEntries(displayStyle);
         titleText.setText(title);
         switch (displayStyle) {
             case 1:
                 detailTextOne.setText(detailTotalBeneficiaries);
-                detailTextTwo.setText(detailSurveyCompleted);
+                detailTextTwo.setText(detailSurveyCompleted + getPercentageString(tbf, bfs));
                 detailTextThree.setVisibility(View.GONE);
                 detailTextfour.setVisibility(View.GONE);
                 break;
             case 2:
                 detailTextOne.setText(detailSurveyCompleted);
-                detailTextTwo.setText(detailConstructionComplete);
+                detailTextTwo.setText(detailConstructionComplete + getPercentageString(bfs,cc));
                 detailTextThree.setVisibility(View.VISIBLE);
-                detailTextThree.setText(detailConstructionInProgress);
+                detailTextThree.setText(detailConstructionInProgress + getPercentageString(bfs,cip));
                 detailTextfour.setVisibility(View.VISIBLE);
-                detailTextfour.setText(detailConstructionNotStarted);
+                detailTextfour.setText(detailConstructionNotStarted + getPercentageString(bfs,cns));
                 break;
             case 3:
                 detailTextOne.setText(detailSurveyCompleted);
-                detailTextTwo.setText(detailsSecondInstallmentApplied);
+                detailTextTwo.setText(detailsSecondInstallmentApplied + getPercentageString(bfs,sia));
                 detailTextThree.setVisibility(View.VISIBLE);
-                detailTextThree.setText(detailsSecondInstallmentNotApplied);
+                detailTextThree.setText(detailsSecondInstallmentNotApplied + getPercentageString(bfs,sina));
                 detailTextfour.setVisibility(View.GONE);
                 break;
             case 4:
                 detailTextOne.setText(detailSurveyCompleted);
-                detailTextTwo.setText(detailGrantRecived);
+                detailTextTwo.setText(detailGrantRecived + getPercentageString(bfs, gr));
                 detailTextThree.setVisibility(View.VISIBLE);
-                detailTextThree.setText(detailGrantNotRecived);
+                detailTextThree.setText(detailGrantNotRecived + getPercentageString(bfs, gnr));
                 detailTextfour.setVisibility(View.GONE);
                 break;
             default:
@@ -120,6 +136,16 @@ public class ListAdapter extends BaseAdapter implements Filterable{
         return itemView;
     }
 
+    public String getPercentageString(int total, int number){
+        DecimalFormat df = new DecimalFormat("##.##");
+        if (total == 0 || number == 0){
+            return " (0%)";
+        }else {
+            return " (" + String.valueOf(df.format(((float)number/(float)total) * 100)) + "%)";
+        }
+
+    }
+
     public void upDateEntries(ArrayList<ListItem> entries) {
         mEntries = entries;
         fetchedData = entries;
@@ -131,8 +157,32 @@ public class ListAdapter extends BaseAdapter implements Filterable{
         notifyDataSetChanged();
     }
 
+    public void sortEntries(final int sortcase){
+        Collections.sort(mEntries, new Comparator<ListItem>() {
+            int sortStyle = sortcase;
+            @Override
+            public int compare(ListItem item1, ListItem item2)
+            {
+                switch (sortcase){
+                    case 1:
+                        return  item2.getBeneficiariesSurveyed() - item1.getBeneficiariesSurveyed();
+                    case 2:
+                        return item2.getConstructionComplete() - item1.getConstructionComplete();
+                    case 3:
+                        return item2.getInstallmentApplied() - item1.getInstallmentApplied();
+                    case 4:
+                        return item2.getGrantReceived() - item1.getGrantReceived();
+                    default:
+                        return item2.getBeneficiariesTotal() - item1.getBeneficiariesTotal();
+                }
+            }
+        });
+
+    }
+
     public void setDisplay(int style){
         displayStyle = style;
+        sortEntries(style);
         notifyDataSetChanged();
     }
 
