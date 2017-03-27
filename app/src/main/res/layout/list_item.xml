@@ -67,6 +67,17 @@
         android:textSize="14sp"
         android:textStyle="bold"/>
 
-    </LinearLayout>>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="-30dp">
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/barchart"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+    </LinearLayout>
 </LinearLayout>

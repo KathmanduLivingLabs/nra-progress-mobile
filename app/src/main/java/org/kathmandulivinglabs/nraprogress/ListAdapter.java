@@ -10,10 +10,18 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class ListAdapter extends BaseAdapter implements Filterable{
 
@@ -52,12 +60,18 @@ public class ListAdapter extends BaseAdapter implements Filterable{
     public View getView(int position, View convertView,
                         ViewGroup parent) {
         LinearLayout itemView;
-        if (convertView == null) {
+            if (convertView == null){
                 itemView = (LinearLayout) mLayoutInflater.inflate(
                         R.layout.list_item, parent, false);
-        } else {
-            itemView = (LinearLayout) convertView;
-        }
+                return renderTextview(itemView, position);
+            }
+            else {
+                return renderTextview((LinearLayout) convertView, position);
+            }
+    }
+
+
+    private LinearLayout renderTextview(LinearLayout itemView, int position){
 
         TextView titleText = (TextView)
                 itemView.findViewById(R.id.listTitle);
@@ -69,6 +83,9 @@ public class ListAdapter extends BaseAdapter implements Filterable{
                 itemView.findViewById(R.id.listDetailThree);
         TextView detailTextfour = (TextView)
                 itemView.findViewById(R.id.listDetailFour);
+        HorizontalBarChart chart = (HorizontalBarChart) itemView.findViewById(R.id.barchart);
+
+
 
         ListItem currrentItem = mEntries.get(position);
         int tbf = currrentItem.getBeneficiariesTotal();
@@ -96,12 +113,22 @@ public class ListAdapter extends BaseAdapter implements Filterable{
         String title = mEntries.get(position).getName();
         sortEntries(displayStyle);
         titleText.setText(title);
+
+
+
         switch (displayStyle) {
             case 1:
                 detailTextOne.setText(detailTotalBeneficiaries);
                 detailTextTwo.setText(detailSurveyCompleted + getPercentageString(tbf, bfs));
                 detailTextThree.setVisibility(View.GONE);
                 detailTextfour.setVisibility(View.GONE);
+                List<BarEntry> entries_sp = new ArrayList<>();
+                entries_sp.add(new BarEntry(0f, new float[] {bfs, tbf-bfs}));
+                BarDataSet set_sp = new BarDataSet(entries_sp,"");
+                set_sp.setStackLabels(new String[]{"Completed", "Remaining"});
+                set_sp.setColors(new int[]{ColorTemplate.rgb("#47ce8f"),ColorTemplate.rgb("#ce4b47")});
+                BarData data_sp = new BarData(set_sp);
+                chart.setData(data_sp);
                 break;
             case 2:
                 detailTextOne.setText(detailSurveyCompleted);
@@ -110,6 +137,13 @@ public class ListAdapter extends BaseAdapter implements Filterable{
                 detailTextThree.setText(detailConstructionInProgress + getPercentageString(bfs,cip));
                 detailTextfour.setVisibility(View.VISIBLE);
                 detailTextfour.setText(detailConstructionNotStarted + getPercentageString(bfs,cns));
+                List<BarEntry> entries_cc = new ArrayList<>();
+                entries_cc.add(new BarEntry(0f, new float[] {(float)cc, (float)cip, (float)cns}));
+                BarDataSet set_cc = new BarDataSet(entries_cc,"");
+                set_cc.setStackLabels(new String[]{"Completed", "In Progress", "Not Started"});
+                set_cc.setColors(new int[]{ColorTemplate.rgb("#47ce8f"),ColorTemplate.rgb("#4786ce"),ColorTemplate.rgb("#ce4b47")});
+                BarData data_cc = new BarData(set_cc);
+                chart.setData(data_cc);
                 break;
             case 3:
                 detailTextOne.setText(detailSurveyCompleted);
@@ -117,6 +151,13 @@ public class ListAdapter extends BaseAdapter implements Filterable{
                 detailTextThree.setVisibility(View.VISIBLE);
                 detailTextThree.setText(detailsSecondInstallmentNotApplied + getPercentageString(bfs,sina));
                 detailTextfour.setVisibility(View.GONE);
+                List<BarEntry> entries_ia = new ArrayList<>();
+                entries_ia.add(new BarEntry(0f, new float[] {sia, sina}));
+                BarDataSet set_ia = new BarDataSet(entries_ia,"");
+                set_ia.setStackLabels(new String[]{"Applied", "Not Applied"});
+                set_ia.setColors(new int[]{ColorTemplate.rgb("#47ce8f"),ColorTemplate.rgb("#ce4b47")});
+                BarData data_ia = new BarData(set_ia);
+                chart.setData(data_ia);
                 break;
             case 4:
                 detailTextOne.setText(detailSurveyCompleted);
@@ -124,6 +165,13 @@ public class ListAdapter extends BaseAdapter implements Filterable{
                 detailTextThree.setVisibility(View.VISIBLE);
                 detailTextThree.setText(detailGrantNotRecived + getPercentageString(bfs, gnr));
                 detailTextfour.setVisibility(View.GONE);
+                List<BarEntry> entries_gr = new ArrayList<>();
+                entries_gr.add(new BarEntry(0f, new float[] {gr,gnr}));
+                BarDataSet set_gr = new BarDataSet(entries_gr,"");
+                set_gr.setStackLabels(new String[]{"Received", "Not Recieved"});
+                set_gr.setColors(new int[]{ColorTemplate.rgb("#47ce8f"),ColorTemplate.rgb("#ce4b47")});
+                BarData data_gr = new BarData(set_gr);
+                chart.setData(data_gr);
                 break;
             default:
                 detailTextOne.setText(detailTotalBeneficiaries);
@@ -132,9 +180,21 @@ public class ListAdapter extends BaseAdapter implements Filterable{
                 detailTextfour.setVisibility(View.GONE);
         }
 
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getXAxis().setEnabled(false);
+        chart.setPinchZoom(false);
+        chart.getDescription().setEnabled(false);
+        chart.setDrawValueAboveBar(false);
+        chart.animateY(300);
+        chart.getData().setHighlightEnabled(false);
+
+        chart.invalidate();
 
         return itemView;
+
     }
+
 
     public String getPercentageString(int total, int number){
         DecimalFormat df = new DecimalFormat("##.##");
